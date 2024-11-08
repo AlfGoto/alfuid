@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "alfuid", "alfuid.csproj", "{BE4CD008-C978-43D6-A9DD-DE80DE8B339B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE4CD008-C978-43D6-A9DD-DE80DE8B339B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE4CD008-C978-43D6-A9DD-DE80DE8B339B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE4CD008-C978-43D6-A9DD-DE80DE8B339B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE4CD008-C978-43D6-A9DD-DE80DE8B339B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17BB83E4-0A17-4708-96D6-1F6FCC931FCA}
+	EndGlobalSection
+EndGlobal
