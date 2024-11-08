@@ -23,3 +23,5 @@
 /home/alf/perso/alfuid/obj/Debug/net8.0/alfuid.pdb
 /home/alf/perso/alfuid/obj/Debug/net8.0/alfuid.genruntimeconfig.cache
 /home/alf/perso/alfuid/obj/Debug/net8.0/ref/alfuid.dll
+/home/alf/perso/alfuid/obj/Debug/net8.0/alfuid.sourcelink.json
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/ball.xnb
