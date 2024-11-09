@@ -1,2 +1,8 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
 "/home/alf/perso/alfuid/Content/ball.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/ball.xnb","TextureProcessor","Texture2DContent",8368,16469,0.0978983
+"/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-attack-Sheet.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/Knight SpriteSheet/Hero-attack-Sheet.xnb","TextureProcessor","Texture2DContent",1337,36949,0.0878734
+"/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-die-Sheet.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/Knight SpriteSheet/Hero-die-Sheet.xnb","TextureProcessor","Texture2DContent",1300,27733,0.0055653
+"/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-hit-Sheet.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/Knight SpriteSheet/Hero-hit-Sheet.xnb","TextureProcessor","Texture2DContent",326,2389,0.0011888
+"/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-idle-Sheet.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/Knight SpriteSheet/Hero-idle-Sheet.xnb","TextureProcessor","Texture2DContent",452,4693,0.0011171
+"/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-jump-Sheet.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/Knight SpriteSheet/Hero-jump-Sheet.xnb","TextureProcessor","Texture2DContent",463,4693,0.0006434
+"/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-walk-Sheet.png","/home/alf/perso/alfuid/Content/bin/DesktopGL/Knight SpriteSheet/Hero-walk-Sheet.xnb","TextureProcessor","Texture2DContent",902,27733,0.0011648

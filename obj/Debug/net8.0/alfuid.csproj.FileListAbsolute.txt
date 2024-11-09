@@ -25,3 +25,9 @@
 /home/alf/perso/alfuid/obj/Debug/net8.0/ref/alfuid.dll
 /home/alf/perso/alfuid/obj/Debug/net8.0/alfuid.sourcelink.json
 /home/alf/perso/alfuid/bin/Debug/net8.0/Content/ball.xnb
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/Knight SpriteSheet/Hero-attack-Sheet.xnb
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/Knight SpriteSheet/Hero-die-Sheet.xnb
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/Knight SpriteSheet/Hero-hit-Sheet.xnb
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/Knight SpriteSheet/Hero-idle-Sheet.xnb
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/Knight SpriteSheet/Hero-jump-Sheet.xnb
+/home/alf/perso/alfuid/bin/Debug/net8.0/Content/Knight SpriteSheet/Hero-walk-Sheet.xnb

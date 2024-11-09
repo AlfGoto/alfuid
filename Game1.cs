@@ -1,98 +1,195 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.IO;
 
-namespace alfuid;
-
-public class Game1 : Game
+namespace alfuid
 {
-    Texture2D ballTexture;
-    Vector2 ballPosition;
-    float ballSpeed;
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
-
-    public Game1()
+    public class Game1 : Game
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
-    }
+        Texture2D knightSpriteSheet;
+        Texture2D knightWalkingSpriteSheet;
+        Vector2 knightPosition;
+        float knightSpeed;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private readonly string positionFilePath = "knightPosition.txt";
+        // Idle animation variables
+        int idleFrameWidth = 24;
+        int idleFrameHeight = 24;
+        int idleTotalFrames = 2;
+        int idleCurrentFrame = 0;
+        float idleTimeElapsed;
+        float idleTimePerFrame = 0.3f;
 
-    protected override void Initialize()
-    {
-        // TODO: Add your initialization logic here
-        ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
-        ballSpeed = 300f;
+        int walkFrameWidth = 48;
+        int walkFrameHeight = 24;
+        int walkTotalFrames = 6;
+        int walkCurrentFrame = 0;
+        float walkTimeElapsed;
+        float walkTimePerFrame = 0.1f;
 
-        base.Initialize();
-    }
+        bool isWalking = false;
+        bool isFacingLeft = false;
 
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
-        ballTexture = Content.Load<Texture2D>("ball");
-    }
-
-    protected override void Update(GameTime gameTime)
-    {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
-        // TODO: Add your update logic here
-
-        // The time since Update was called last.
-        float updatedBallSpeed = ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-        var kstate = Keyboard.GetState();
-
-        if (kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.Z))
+        public Game1()
         {
-            ballPosition.Y -= updatedBallSpeed;
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
-        if (kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S))
+        protected override void Initialize()
         {
-            ballPosition.Y += updatedBallSpeed;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
+
+            if (File.Exists(positionFilePath))
+            {
+                using (StreamReader reader = new StreamReader(positionFilePath))
+                {
+                    float.TryParse(reader.ReadLine(), out float x);
+                    float.TryParse(reader.ReadLine(), out float y);
+                    knightPosition = new Vector2(x, y);
+                }
+            }
+            else
+            {
+                knightPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
+            }
+            knightSpeed = 300f;
+
+            base.Initialize();
         }
 
-        if (kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Q))
+        protected override void LoadContent()
         {
-            ballPosition.X -= updatedBallSpeed;
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Load knight sprite sheet
+            knightSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-idle-Sheet");
+            knightWalkingSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-walk-Sheet");
         }
 
-        if (kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D))
+        protected override void Update(GameTime gameTime)
         {
-            ballPosition.X += updatedBallSpeed;
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                using (StreamWriter writer = new StreamWriter(positionFilePath))
+                {
+                    writer.WriteLine(knightPosition.X);
+                    writer.WriteLine(knightPosition.Y);
+                }
+                Exit();
+            }
+
+            if (isWalking)
+            {
+                walkTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (walkTimeElapsed >= walkTimePerFrame)
+                {
+                    walkTimeElapsed -= walkTimePerFrame;
+                    walkCurrentFrame = (walkCurrentFrame + 1) % walkTotalFrames;
+                }
+            }
+            else
+            {
+                idleTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (idleTimeElapsed >= idleTimePerFrame)
+                {
+                    idleTimeElapsed -= idleTimePerFrame;
+                    idleCurrentFrame = (idleCurrentFrame + 1) % idleTotalFrames;
+                }
+            }
+
+            float updatedKnightSpeed = knightSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var kstate = Keyboard.GetState();
+
+            if (kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.Z))
+            {
+                knightPosition.Y -= kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Q) ||
+                                    kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D)
+                                    ? updatedKnightSpeed * 0.70f : updatedKnightSpeed;
+            }
+
+            if (kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S))
+            {
+                knightPosition.Y += kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Q) ||
+                                    kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D)
+                                    ? updatedKnightSpeed * 0.70f : updatedKnightSpeed;
+            }
+
+            if (kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Q))
+            {
+                isFacingLeft = true;
+                knightPosition.X -= kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.Z) ||
+                                    kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S)
+                                    ? updatedKnightSpeed * 0.70f : updatedKnightSpeed;
+            }
+
+            if (kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D))
+            {
+                isFacingLeft = false;
+                knightPosition.X += kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.Z) ||
+                                    kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S)
+                                    ? updatedKnightSpeed * 0.70f : updatedKnightSpeed;
+            }
+
+
+            if (kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.Z)
+            || kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S)
+            || kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.Q)
+            || kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D)) { isWalking = true; }
+            else if (kstate.IsKeyDown(Keys.Right)) { isWalking = true; }
+            else { isWalking = false; }
+
+            base.Update(gameTime);
         }
 
-        base.Update(gameTime);
-    }
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+            Rectangle sourceRectangle;
+            Texture2D spriteSheetToUse;
+            float spriteDecal;
 
-        // TODO: Add your drawing code here
-        _spriteBatch.Begin();
-        // _spriteBatch.Draw(ballTexture, ballPosition, Color.White);
-        _spriteBatch.Draw(
-            ballTexture,
-            ballPosition,
-            null,
-            Color.White,
-            0f,
-            new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),
-            Vector2.One,
-            SpriteEffects.None,
-            0f
-        );
-        _spriteBatch.End();
+            if (isWalking)
+            {
+                sourceRectangle = new Rectangle(walkCurrentFrame * walkFrameWidth, 0, walkFrameWidth, walkFrameHeight);
+                spriteSheetToUse = knightWalkingSpriteSheet;
+                spriteDecal = walkFrameWidth / 2;
+            }
+            else
+            {
+                sourceRectangle = new Rectangle(idleCurrentFrame * idleFrameWidth, 0, idleFrameWidth, idleFrameHeight);
+                spriteSheetToUse = knightSpriteSheet;
+                spriteDecal = idleFrameWidth / 2;
+            }
+            Vector2 scale = new Vector2(2.0f, 2.0f);
 
-        base.Draw(gameTime);
+            SpriteEffects spriteEffects = isFacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-        base.Draw(gameTime);
+            _spriteBatch.Begin();
+
+            _spriteBatch.Draw(
+                spriteSheetToUse,
+                knightPosition,
+                sourceRectangle,
+                Color.White,
+                0f,
+                new Vector2(spriteDecal, idleFrameHeight / 2),
+                scale,
+                spriteEffects,
+                0f
+            );
+
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
     }
 }

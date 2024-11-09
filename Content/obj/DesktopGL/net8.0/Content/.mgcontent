@@ -5,8 +5,20 @@
   <Config />
   <SourceFiles>
     <File>/home/alf/perso/alfuid/Content/ball.png</File>
+    <File>/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-attack-Sheet.png</File>
+    <File>/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-die-Sheet.png</File>
+    <File>/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-hit-Sheet.png</File>
+    <File>/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-idle-Sheet.png</File>
+    <File>/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-jump-Sheet.png</File>
+    <File>/home/alf/perso/alfuid/Content/Knight SpriteSheet/Hero-walk-Sheet.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>
