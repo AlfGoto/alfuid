@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("alfuid")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3d673e7215167178a810ea98e5da211c461033c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4733831d64fd330387c3c5bb929bc5195d026ed5")]
 [assembly: System.Reflection.AssemblyProductAttribute("alfuid")]
 [assembly: System.Reflection.AssemblyTitleAttribute("alfuid")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
