@@ -11,6 +11,7 @@ namespace alfuid
         Texture2D knightSpriteSheet;
         Texture2D knightWalkingSpriteSheet;
         Texture2D knightAttackingSpriteSheet;
+        Texture2D knightDyingSpriteSheet;
         Vector2 knightPosition;
         float knightSpeed;
         private GraphicsDeviceManager _graphics;
@@ -37,6 +38,14 @@ namespace alfuid
         int attackCurrentFrame = 0;
         float attackTimeElapsed;
         float attackTimePerFrame = 0.05f;
+
+        int dyingFrameWidth = 24;
+        int dyingFrameHeight = 24;
+        int dyingTotalFrames = 12;
+        int dyingCurrentFrame = 0;
+        float dyingTimeElapsed;
+        float dyingTimePerFrame = 0.05f;
+        bool isDying = false;
         bool isAttacking = false;
         bool isWalking = false;
         bool isFacingLeft = false;
@@ -81,6 +90,7 @@ namespace alfuid
             knightSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-idle-Sheet");
             knightWalkingSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-walk-Sheet");
             knightAttackingSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-attack-Sheet");
+            knightDyingSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-die-Sheet");
         }
 
         protected override void Update(GameTime gameTime)
@@ -92,12 +102,28 @@ namespace alfuid
                     writer.WriteLine(knightPosition.X);
                     writer.WriteLine(knightPosition.Y);
                 }
-                Exit();
+                // Exit();
+                isDying = true;
             }
 
 
+            if (isDying)
+            {
+                dyingTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (dyingTimeElapsed >= dyingTimePerFrame)
+                {
+                    dyingTimeElapsed -= dyingTimePerFrame;
+                    dyingCurrentFrame++;
 
-            if (isAttacking)
+                    if (dyingCurrentFrame >= dyingTotalFrames)
+                    {
+                        isDying = false;
+                        dyingCurrentFrame = 0;
+                        Exit();
+                    }
+                }
+            }
+            else if (isAttacking)
             {
                 attackTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (attackTimeElapsed >= attackTimePerFrame)
@@ -193,7 +219,13 @@ namespace alfuid
             Texture2D spriteSheetToUse;
             float spriteDecal;
 
-            if (isAttacking)
+            if (isDying)
+            {
+                sourceRectangle = new Rectangle(dyingCurrentFrame * dyingFrameWidth, 0, dyingFrameWidth, dyingFrameHeight);
+                spriteSheetToUse = knightDyingSpriteSheet;
+                spriteDecal = dyingFrameWidth / 2;
+            }
+            else if (isAttacking)
             {
                 sourceRectangle = new Rectangle(attackCurrentFrame * attackFrameWidth, 0, attackFrameWidth, attackFrameHeight);
                 spriteSheetToUse = knightAttackingSpriteSheet;
