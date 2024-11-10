@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.IO;
 
 namespace alfuid
@@ -9,6 +10,7 @@ namespace alfuid
     {
         Texture2D knightSpriteSheet;
         Texture2D knightWalkingSpriteSheet;
+        Texture2D knightAttackingSpriteSheet;
         Vector2 knightPosition;
         float knightSpeed;
         private GraphicsDeviceManager _graphics;
@@ -29,6 +31,13 @@ namespace alfuid
         float walkTimeElapsed;
         float walkTimePerFrame = 0.1f;
 
+        int attackFrameWidth = 48;
+        int attackFrameHeight = 24;
+        int attackTotalFrames = 8;
+        int attackCurrentFrame = 0;
+        float attackTimeElapsed;
+        float attackTimePerFrame = 0.05f;
+        bool isAttacking = false;
         bool isWalking = false;
         bool isFacingLeft = false;
 
@@ -71,6 +80,7 @@ namespace alfuid
             // Load knight sprite sheet
             knightSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-idle-Sheet");
             knightWalkingSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-walk-Sheet");
+            knightAttackingSpriteSheet = Content.Load<Texture2D>("Knight SpriteSheet/Hero-attack-Sheet");
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,7 +95,24 @@ namespace alfuid
                 Exit();
             }
 
-            if (isWalking)
+
+
+            if (isAttacking)
+            {
+                attackTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (attackTimeElapsed >= attackTimePerFrame)
+                {
+                    attackTimeElapsed -= attackTimePerFrame;
+                    attackCurrentFrame++;
+
+                    if (attackCurrentFrame >= attackTotalFrames)
+                    {
+                        isAttacking = false;
+                        attackCurrentFrame = 0;
+                    }
+                }
+            }
+            else if (isWalking)
             {
                 walkTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (walkTimeElapsed >= walkTimePerFrame)
@@ -105,7 +132,17 @@ namespace alfuid
             }
 
             float updatedKnightSpeed = knightSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (isAttacking) updatedKnightSpeed /= 4f;
             var kstate = Keyboard.GetState();
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed) { }
+
+            if ((kstate.IsKeyDown(Keys.Enter) || Mouse.GetState().LeftButton == ButtonState.Pressed) && !isAttacking)
+            {
+                isAttacking = true;
+                attackCurrentFrame = 0;
+                attackTimeElapsed = 0f;
+            }
 
             if (kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.Z))
             {
@@ -156,7 +193,13 @@ namespace alfuid
             Texture2D spriteSheetToUse;
             float spriteDecal;
 
-            if (isWalking)
+            if (isAttacking)
+            {
+                sourceRectangle = new Rectangle(attackCurrentFrame * attackFrameWidth, 0, attackFrameWidth, attackFrameHeight);
+                spriteSheetToUse = knightAttackingSpriteSheet;
+                spriteDecal = walkFrameWidth / 2;
+            }
+            else if (isWalking)
             {
                 sourceRectangle = new Rectangle(walkCurrentFrame * walkFrameWidth, 0, walkFrameWidth, walkFrameHeight);
                 spriteSheetToUse = knightWalkingSpriteSheet;
